@@ -8,10 +8,11 @@ import com.practicetestautomation.base.BaseTest;
 import com.practicetestautomation.pages.LoggedInSuccessfullyPage;
 import com.practicetestautomation.pages.TestLoginPage;
 
-public class LoginTests extends BaseTest {
-
+public class LoginTests extends BaseTest
+{
 	@Test(priority = 1)
-	public void logInTest() {
+	public void logInTest()
+	{
 		TestLoginPage testLoginPage = new TestLoginPage(driver, log).open();
 		LoggedInSuccessfullyPage loggedInSuccessfullyPage = testLoginPage.logIn("student", "Password123");
 
@@ -19,15 +20,13 @@ public class LoginTests extends BaseTest {
 
 		String expectedSuccessMessage = "Congratulations student. You successfully logged in!";
 		String actualSuccessMessage = loggedInSuccessfullyPage.getCurrentPageSource();
-		Assert.assertTrue(actualSuccessMessage.contains(expectedSuccessMessage),
-				"actualSuccessMessage does not contain expectedSuccessMessage\nexpectedSuccessMessage: "
-						+ expectedSuccessMessage + "\nactualSuccessMessage: " + actualSuccessMessage);
+		Assert.assertTrue(actualSuccessMessage.contains(expectedSuccessMessage), "actualSuccessMessage does not contain expectedSuccessMessage\nexpectedSuccessMessage: " + expectedSuccessMessage + "\nactualSuccessMessage: " + actualSuccessMessage);
 	}
-
 
 	@Parameters({ "username", "password", "expectedMessage" })
 	@Test(priority = 2)
-	public void negativeLoginTest(String username, String password, String expectedErrorMessage) {
+	public void negativeLoginTest(String username, String password, String expectedErrorMessage)
+	{
 		TestLoginPage testLoginPage = new TestLoginPage(driver, log).open();
 		testLoginPage.negativeLogIn(username, password);
 
