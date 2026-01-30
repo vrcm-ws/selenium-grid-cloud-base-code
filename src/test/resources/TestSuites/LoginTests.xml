@@ -3,7 +3,8 @@
 <suite name="LoginTestsSuite">
 
 	<test name="PositiveTests-Chrome">
-		<parameter name="browser" value="chrome" />
+		<parameter name="browser" value="MicrosoftEdge"/>
+		<parameter name="grid" value="true"/>
 		<classes>
 			<class name="com.practicetestautomation.tests.LoginTests">
 				<methods>
@@ -14,7 +15,8 @@
 	</test>
 
 	<test name="NegativeUsernameTests">
-		<parameter name="browser" value="chrome" />
+		<parameter name="browser" value="firefox" />
+		<parameter name="grid" value="true"/>
 		<parameter name="username" value="incorrectUsername" />
 		<parameter name="password" value="Password123" />
 		<parameter name="expectedMessage" value="Your username is invalid!" />
@@ -28,7 +30,8 @@
 	</test>
 
 	<test name="NegativePasswordTests">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="grid" value="true"/>
 		<parameter name="username" value="student" />
 		<parameter name="password" value="incorrectPassword!" />
 		<parameter name="expectedMessage" value="Your password is invalid!" />
