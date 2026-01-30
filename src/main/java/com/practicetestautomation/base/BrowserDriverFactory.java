@@ -42,8 +42,7 @@ public class BrowserDriverFactory
 				driver.set(new EdgeDriver());
 				break;
 	
-			default:
-				log.debug("Do not know how to start: " + browser + ", starting chrome.");
+			default:				
 				driver.set(new ChromeDriver());
 				break;
 		}
