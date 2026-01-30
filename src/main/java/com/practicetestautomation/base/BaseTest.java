@@ -20,29 +20,22 @@ public class BaseTest
 	protected WebDriver driver;
 	protected Logger log;
 
-	@Parameters({ "browser" })
+	@Parameters({ "browser", "grid" })
 	@BeforeMethod(alwaysRun = true)
-	public void setUp(Method method, @Optional("chrome") String browser, ITestContext ctx)
+	public void setUp(Method method, @Optional("chrome") String browser, @Optional("false") boolean grid, ITestContext ctx)
 	{
 		log = LogManager.getLogger(ctx.getCurrentXmlTest().getSuite().getName());
-		//driver = new BrowserDriverFactory(browser, log).createDriver();
 		
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setBrowserName("firefox");
-		
-		String gridServer = "http://192.168.100.24:4444";
-		
-		try
-		{			
-			driver = new RemoteWebDriver(URI.create(gridServer).toURL(), capabilities);
-		}
-		catch (MalformedURLException e)
+		if(grid)
 		{
-			log.info(e.getMessage());
+			driver = new BrowserDriverFactory(browser, log).createRemoteDriver();
 		}
-		
-		
-		driver.manage().window().maximize();
+		else
+		{
+			driver = new BrowserDriverFactory(browser, log).createDriver();
+		}
+					
+		//driver.manage().window().maximize();
 	}
  
 	@AfterMethod(alwaysRun = true)
@@ -51,5 +44,4 @@ public class BaseTest
 		log.info("Close driver");
 		driver.quit();
 	}
-
 }
