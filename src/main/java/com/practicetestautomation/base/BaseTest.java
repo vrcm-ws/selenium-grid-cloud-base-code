@@ -19,20 +19,29 @@ public class BaseTest
 {
 	protected WebDriver driver;
 	protected Logger log;
+	protected String testName;
 
-	@Parameters({ "browser", "grid" })
+	@Parameters({ "browser", "platform" })
 	@BeforeMethod(alwaysRun = true)
-	public void setUp(Method method, @Optional("chrome") String browser, @Optional("false") boolean grid, ITestContext ctx)
-	{
-		log = LogManager.getLogger(ctx.getCurrentXmlTest().getSuite().getName());
+	public void setUp(Method method, @Optional("chrome") String browser, @Optional String platform)
+	{	
+		testName = method.getDeclaringClass().getSimpleName() + " :: " + method.getName();
+		log = LogManager.getLogger(testName);
 		
-		if(grid)
+		switch(platform.toLowerCase())
 		{
-			driver = new BrowserDriverFactory(browser, log).createRemoteDriver();
-		}
-		else
-		{
-			driver = new BrowserDriverFactory(browser, log).createDriver();
+		case "local":
+			driver = new DriverFactory(browser, log, testName).createDriver();
+			break;
+		case "grid":
+			driver = new DriverFactory(browser, log, testName).createRemoteDriver();
+			break;
+		case "cloud":
+			driver = new DriverFactory(browser, log, testName).createCloudDriver();
+			break;
+		default:
+			driver = new DriverFactory(browser, log, testName).createDriver();
+			break;			
 		}
 					
 		//driver.manage().window().maximize();
@@ -43,5 +52,5 @@ public class BaseTest
 	{
 		log.info("Close driver");
 		driver.quit();
-	}
+	}	
 }
