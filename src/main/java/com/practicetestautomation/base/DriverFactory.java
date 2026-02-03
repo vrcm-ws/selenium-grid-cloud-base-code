@@ -18,11 +18,13 @@ import org.openqa.selenium.remote.AbstractDriverOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import com.saucelabs.common.SauceOnDemandAuthentication;
+import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.testng.SauceOnDemandAuthenticationProvider;
 
-public class DriverFactory implements SauceOnDemandAuthenticationProvider
+public class DriverFactory implements SauceOnDemandAuthenticationProvider, SauceOnDemandSessionIdProvider
 {
 	private ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+	private ThreadLocal<String> sessionID = new ThreadLocal<>();
 	private RemoteWebDriver remoteDriver;
 	private String browser;
 	private Logger log;
@@ -113,6 +115,8 @@ public class DriverFactory implements SauceOnDemandAuthenticationProvider
 			log.info(e.getMessage());
 		}
 
+		sessionID.set(((RemoteWebDriver) remoteDriver).getSessionId().toString());
+		
 		return remoteDriver;
 	}
 
@@ -134,7 +138,7 @@ public class DriverFactory implements SauceOnDemandAuthenticationProvider
 		{
 			log.info(e.getMessage());
 		}
-		
+					
 		return remoteDriver;
 	}
 	
@@ -154,5 +158,11 @@ public class DriverFactory implements SauceOnDemandAuthenticationProvider
 	public SauceOnDemandAuthentication getAuthentication()
 	{		
 		return auth;
+	}
+
+	@Override
+	public String getSessionId()
+	{
+		return sessionID.get();
 	}
 }

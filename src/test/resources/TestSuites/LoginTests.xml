@@ -4,7 +4,7 @@
 
 	<test name="PositiveTests-Chrome">
 		<parameter name="browser" value="MicrosoftEdge"/>
-		<parameter name="platform" value="cloud"/>
+		<parameter name="driverType" value="cloud"/>
 		<classes>
 			<class name="com.practicetestautomation.tests.LoginTests">
 				<methods>
@@ -16,7 +16,7 @@
 
 	<test name="NegativeUsernameTests">
 		<parameter name="browser" value="firefox" />
-		<parameter name="platform" value="cloud"/>
+		<parameter name="driverType" value="cloud"/>
 		<parameter name="username" value="incorrectUsername" />
 		<parameter name="password" value="Password123" />
 		<parameter name="expectedMessage" value="Your username is invalid!" />
@@ -31,7 +31,7 @@
 
 	<test name="NegativePasswordTests">
 		<parameter name="browser" value="chrome" />
-		<parameter name="platform" value="cloud"/>
+		<parameter name="driverType" value="cloud"/>
 		<parameter name="username" value="student" />
 		<parameter name="password" value="incorrectPassword!" />
 		<parameter name="expectedMessage" value="Your password is invalid!" />

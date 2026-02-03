@@ -1,46 +1,51 @@
 package com.practicetestautomation.base;
 
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
+@Listeners({SauceLabsTestListener.class})
 public class BaseTest
 {
 	protected WebDriver driver;
 	protected Logger log;
 	protected String testName;
 
-	@Parameters({ "browser", "platform" })
+	@Parameters({ "browser", "driverType" })
 	@BeforeMethod(alwaysRun = true)
-	public void setUp(Method method, @Optional("chrome") String browser, @Optional String platform)
+	public void setUp(Method method, @Optional("chrome") String browser, @Optional String driverType, ITestContext testContext)
 	{	
 		testName = method.getDeclaringClass().getSimpleName() + " :: " + method.getName();
 		log = LogManager.getLogger(testName);
 		
-		switch(platform.toLowerCase())
+		DriverFactory factory = new DriverFactory(browser, log, testName);
+		
+		testContext.setAttribute("sauceLabs", false);
+		
+		switch(driverType.toLowerCase())
 		{
 		case "local":
-			driver = new DriverFactory(browser, log, testName).createDriver();
+			driver = factory.createDriver();
 			break;
 		case "grid":
-			driver = new DriverFactory(browser, log, testName).createRemoteDriver();
+			driver = factory.createRemoteDriver();
 			break;
-		case "cloud":
-			driver = new DriverFactory(browser, log, testName).createCloudDriver();
+		case "cloud":	
+			driver = factory.createCloudDriver();
+			
+			testContext.setAttribute("sauceLabs", true);
+			testContext.setAttribute("sessionID", factory.getSessionId());	
+			
 			break;
 		default:
-			driver = new DriverFactory(browser, log, testName).createDriver();
+			driver = factory.createDriver();
 			break;			
 		}
 					
